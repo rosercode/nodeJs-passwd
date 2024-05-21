@@ -9,6 +9,8 @@ import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 
+import 'noty/lib/noty.css';  // 引入 Noty 的样式
+
 // Vue 路由
 import routers from './router'
 Vue.use(routers)

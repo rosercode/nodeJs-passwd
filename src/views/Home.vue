@@ -1,24 +1,22 @@
 <template>
-
   <div class="row">
     <div class="form-horizontal">
       <div class="form-group">
         <label for="passwdNumber" class="col-sm-2 control-label">生成密码的数目:</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="passwdNumber" placeholder="" v-model="passwdNumber">
+          <input type="text" class="form-control" id="passwdNumber" placeholder="" v-model="passwdNumber"/>
         </div>
       </div>
       <div class="form-group">
         <label for="passwdLength" class="col-sm-2" style="text-align: right">密码长度:</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="passwdLength" placeholder="" value="16" v-model="passwdLength">>
+          <input type="text" class="form-control" id="passwdLength" placeholder="" value="16" v-model="passwdLength"/>
         </div>
       </div>
       <div class="form-group">
         <label for="passwdLength" class="col-sm-2" style="text-align: right">使用的字符列表</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="characterString" placeholder=""
-            v-model="characterString">
+          <input type="text" class="form-control" id="characterString" placeholder="" v-model="characterString">
         </div>
       </div>
       <div class="form-group">
@@ -71,9 +69,7 @@
           </table>
         </div>
         <div class="col-sm-1"></div>
-
       </div>
-
     </div>
   </div>
 
@@ -81,8 +77,8 @@
 
 
 <script>
-  // import TopBar from "@/components/TopBar"
   import clipboard from "clipboard";
+  import Noty from 'noty';
 
   export default {
     name: "HomeView",
@@ -140,9 +136,19 @@
           passwdList.push(passwd)
         }
         this.passwdList = passwdList
+        new Noty({
+          type: 'success',
+          text: '生成成功',
+          timeout: 4000,
+        }).show();
       },
       async copyPass(pass) {
         clipboard.copy(pass)
+        new Noty({
+          type: 'success',
+          text: '复制成功',
+          timeout: 4000,
+        }).show();
       }
     }
   }

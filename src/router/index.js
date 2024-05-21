@@ -1,4 +1,3 @@
-
 import HomeView from "@/views/Home.vue";
 import DocView from "@/views/Doc.vue";
 
