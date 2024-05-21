@@ -5,20 +5,20 @@
       <div class="form-group">
         <label for="passwdNumber" class="col-sm-2 control-label">生成密码的数目:</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="passwdNumber" placeholder="" value="3">
+          <input type="text" class="form-control" id="passwdNumber" placeholder="" v-model="passwdNumber">
         </div>
       </div>
       <div class="form-group">
         <label for="passwdLength" class="col-sm-2" style="text-align: right">密码长度:</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="passwdLength" placeholder="" value="16">
+          <input type="text" class="form-control" id="passwdLength" placeholder="" value="16" v-model="passwdLength">>
         </div>
       </div>
       <div class="form-group">
         <label for="passwdLength" class="col-sm-2" style="text-align: right">使用的字符列表</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="characterString" placeholder="" onchange="changeString()"
-            :value="number+lowercaseLetter+uppercaseLetter+character">
+          <input type="text" class="form-control" id="characterString" placeholder=""
+            v-model="characterString">
         </div>
       </div>
       <div class="form-group">
@@ -26,31 +26,28 @@
         <div class="col-sm-11 text-left">
           <div class="checkbox">
             <label>
-              <input type="checkbox" :value="number" onclick="changeChars(this)" id="number" checked>数字 {{number}}
+              <input type="checkbox" v-model="numberChecked" @change="changeString">数字 {{ number }}
             </label>
           </div>
           <div class="checkbox">
             <label>
-              <input type="checkbox" :value="lowercaseLetter" onclick="changeChars(this)" id="lowercaseLetter"
-                checked>小写字母 {{lowercaseLetter}}
+              <input type="checkbox" v-model="lowercaseChecked" @change="changeString">小写字母 {{ lowercaseLetter }}
             </label>
           </div>
           <div class="checkbox">
             <label>
-              <input type="checkbox" value="uppercaseLetter" onclick="changeChars(this)" id="uppercaseLetter"
-                checked>大写字母 {{uppercaseLetter}}
+              <input type="checkbox" v-model="uppercaseChecked" @change="changeString">大写字母 {{ uppercaseLetter }}
             </label>
           </div>
           <div class="checkbox">
             <label>
-              <input type="checkbox" :value="character" onclick="changeChars(this)" id="character" checked>常用符号
-              {{character}}
+              <input type="checkbox" v-model="characterChecked">常用符号 {{ character }}
             </label>
           </div>
         </div>
       </div>
       <div class="form-group text-right">
-        <button class="btn btn-primary" onclick="generatePwd()">生成</button>
+        <button class="btn btn-primary" @click="generatePwd">生成</button>
       </div>
       <div class="form-group">
         <div class="col-sm-1"></div>
@@ -65,10 +62,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="idx in passwdNumber">
-                <td>{{idx}}</td>
-                <td>123456</td>
-                <td><button class="btn btn-primary">copy</button></td>
+              <tr v-for="(pass, index) in passwdList">
+                <td>{{ index }}</td>
+                <td>{{ pass }}</td>
+                <td><button class="btn btn-primary" @click="copyPass(pass)">copy</button></td>
               </tr>
             </tbody>
           </table>
@@ -85,6 +82,8 @@
 
 <script>
   // import TopBar from "@/components/TopBar"
+  import clipboard from "clipboard";
+
   export default {
     name: "HomeView",
     components: {
@@ -98,18 +97,52 @@
         number: "0123456789",
         lowercaseLetter: "abcdefghijklmnopqrstuvwxyz",
         uppercaseLetter: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-        character: "~!@#$%^&*()_+"
+        character: "~!@#$%^&*()_+",
+
+        characterString:'',
+        passwdList:[],
+
+        numberChecked: true,
+        lowercaseChecked: true,
+        uppercaseChecked: true,
+        characterChecked: true,
       }
+    },
+    created() {
+      this.characterString = this.number + this.lowercaseLetter + this.uppercaseLetter + this.character
+      this.generatePwd()
     },
     methods: {
       changeString() {
-
+        let characterString = ""
+        if (this.numberChecked){
+          characterString += this.number
+        }
+        if (this.lowercaseChecked){
+          characterString += this.lowercaseLetter
+        }
+        if (this.uppercaseChecked){
+          characterString += this.uppercaseLetter
+        }
+        if (this.characterChecked){
+          characterString += this.character
+        }
+        this.characterString = characterString
       },
       generatePwd() {
-
+        let passwdList  = []
+        for (let i = 0; i < this.passwdNumber; i++) {
+          let passwd = '';
+          for (let j = 0; j < this.passwdLength; j++) {
+            var randomNum = Math.floor(Math.random() * this.characterString.length);
+            passwd += this.characterString[randomNum]
+          }
+          passwdList.push(passwd)
+        }
+        this.passwdList = passwdList
       },
-      copyPass() {
-
+      async copyPass(pass) {
+        clipboard.copy(pass)
       }
     }
   }

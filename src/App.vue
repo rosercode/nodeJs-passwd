@@ -4,7 +4,6 @@
     <div class="container">
       <router-view></router-view>
     </div> <!-- /container -->
-
     <BottomBar></BottomBar>
   </div>
 </template>
@@ -28,7 +27,6 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 30px;
   }
 
   body {
